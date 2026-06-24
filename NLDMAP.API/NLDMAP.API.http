@@ -1,0 +1,6 @@
+@NLDMAP.API_HostAddress = http://localhost:5043
+
+GET {{NLDMAP.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
