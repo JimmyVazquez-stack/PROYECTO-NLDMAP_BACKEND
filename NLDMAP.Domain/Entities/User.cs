@@ -1,6 +1,6 @@
 ﻿namespace NLDMAP.Domain.Entities
 {
-    public class Usuario
+    public class User
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public String FullName { get; set; } = string.Empty;
