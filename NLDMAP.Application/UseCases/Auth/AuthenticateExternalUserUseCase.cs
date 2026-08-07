@@ -6,11 +6,11 @@ namespace NLDMAP.Application.UseCases.Auth
 {
     public class AuthenticateExternalUserUseCase
     {
-        private readonly IUsuarioRepository _userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IExternalAuthValidator _externalAuthValidator;
         
         public AuthenticateExternalUserUseCase(
-            IUsuarioRepository userRepository,
+            IUserRepository userRepository,
             IExternalAuthValidator externalAuthValidator)
         {
             _userRepository = userRepository;
@@ -26,22 +26,22 @@ namespace NLDMAP.Application.UseCases.Auth
                 throw new UnauthorizedAccessException("Token externo invalido.");
 
             //Buscar si usuario existe en Postgresql por email
-            var usuario = await _userRepository.GetByEmailAsync(userInfo.Email);
+            var user = await _userRepository.GetByEmailAsync(userInfo.Email);
 
             //si no existe, es un ciudadano nuevo 
-            if (usuario == null)
+            if (user == null)
             {
-                usuario = new Usuario
+                user = new User
                 {
                     Email = userInfo.Email,
-                    Nombre = userInfo.FullName,
+                    FullName = userInfo.FullName,
                     Role = "Ciudadano"
                 };
-                await _userRepository.AddSync(usuario);
+                await _userRepository.AddSync(user);
             }
 
             // controlador se encarga de generar JWT de openiddict
-            return usuario.Email;
+            return user.Email;
 
         }
     }
