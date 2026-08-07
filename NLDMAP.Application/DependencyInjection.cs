@@ -1,7 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-namespace NLDMAP.Application.UseCases.Auth;
+using NLDMAP.Application.UseCases.Auth;
 
-public class DependencyInjection
+namespace NLDMAP.Application
 {
-    
+    public static class DependencyInjection
+    {
+        public static IServiceCollection AddApplication(this IServiceCollection services)
+        {
+            //Registrar orquestadores
+            services.AddScoped<AuthenticateExternalUserUseCase>();
+
+            return services;
+        }
+    }
 }
