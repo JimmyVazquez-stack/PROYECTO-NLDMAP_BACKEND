@@ -1,15 +1,19 @@
-﻿using NLDMAP.Domain.Interfaces;
+﻿using Microsoft.Extensions.DependencyInjection;
+using NLDMAP.Domain.Interfaces;
 using NLDMAP.Infrastructure.ExternalServices;
 using NLDMAP.Infrastructure.Repositories;
-using Microsoft.Extensions.DependencyInjection;
+
 
 namespace NLDMAP.Infrastructure
 {
-    public class DependencyInjection
+    public static class DependencyInjection
     {
-        services.AddScoped<IUsuarioRepository, EfUsuarioRepository>();
-        services.AddScoped<IExternalAuthValidator, GoogleAuthVlidator>();
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        {
+            services.AddScoped<IUserRepository, EfUserRepository>();
+            services.AddScoped<IExternalAuthValidator, GoogleAuthVlidator>();
         
-        return services;
+            return services;
+        }
     }
 }
