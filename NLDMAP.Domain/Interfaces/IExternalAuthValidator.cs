@@ -2,7 +2,7 @@
 
 namespace NLDMAP.Domain.Interfaces
 {
-    public class IExternalAuthValidator
+    public interface IExternalAuthValidator
     {
         Task<ExternalUserInfo?> ValidateTokenAsync(string provider, string idToken);
     }
