@@ -4,13 +4,13 @@ namespace NLDMAP.Domain.Entities;
 
 public class Report
 {
-    public Guid Id { get; private set; }
-    public string Folio { get; private set; }
-    public Guid CreatorId { get; private set; } 
-    public MissingPerson Person { get; private set; }
-    public Coordinate LastSightingLocation { get; private set; }
-    public string CaseStatus { get; private set; }    // Texto en español: "SIN_VALIDAR", "ACTIVO"
-    public DateTime CreationDate { get; private set; }
+    public required Guid Id { get;  set; } = Guid.NewGuid();
+    public required string Folio { get;  set; }
+    public required Guid CreatorId { get;  set; } 
+    public  required MissingPerson Person { get;  set; }
+    public required Coordinate LastSightingLocation { get;  set; }
+    public required string CaseStatus { get;  set; }    // Texto en español: "SIN_VALIDAR", "ACTIVO"
+    public DateTime CreationDate { get; set; } = DateTime.UtcNow;
 
     private Report() { } 
 
