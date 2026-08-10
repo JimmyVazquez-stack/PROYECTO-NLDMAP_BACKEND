@@ -2,6 +2,7 @@ namespace NLDMAP.Domain.Entities;
 
 public class MissingPerson
 {
+    public Guid Id { get; set; } = Guid.NewGuid();
     public string Name { get; private set; }         
     public int Age { get; private set; }
     public string Gender { get; private set; }       
