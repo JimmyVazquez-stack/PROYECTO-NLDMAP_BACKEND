@@ -4,7 +4,7 @@ using NLDMAP.Domain.ValueObjects;
 
 namespace NLDMAP.Infrastructure.ExternalServices;
 
-public class GoogleAuthVlidator : IExternalAuthValidator
+public class GoogleAuthValidator : IExternalAuthValidator
 {
     public async Task<ExternalUserInfo?> ValidateTokenAsync(string provider, string idToken)
     {
