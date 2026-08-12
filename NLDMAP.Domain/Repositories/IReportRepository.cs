@@ -3,8 +3,8 @@ namespace NLDMAP.Domain.Repositories;
 
 public interface IReportRepository
 {
-    Task<ReportNLD> GetByIdAsync(Guid id);
-    Task<ReportNLD> GetByFolioAsync(string folio);
-    Task AddAsync(ReportNLD report);
-    Task UpdateAsync(ReportNLD report);
+    Task<ReportNld> GetByIdAsync(Guid id);
+    Task<ReportNld> GetByFolioAsync(string folio);
+    Task AddAsync(ReportNld report);
+    Task UpdateAsync(ReportNld report);
 }
