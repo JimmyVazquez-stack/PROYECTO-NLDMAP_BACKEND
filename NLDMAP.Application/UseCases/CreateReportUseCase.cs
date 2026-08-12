@@ -29,7 +29,7 @@ public class CreateReportUseCase
         );
 
         // 3. Crear la entidad raíz que orquesta el reporte y genera el folio
-        var report = Report.CreateNewReport(request.CreatorId, person, location);
+        var report = ReportNLD.CreateNewReport(request.CreatorId, person, location);
 
         // 4. Guardar en base de datos de manera asíncrona usando la abstracción
         await _reportRepository.AddAsync(report);
