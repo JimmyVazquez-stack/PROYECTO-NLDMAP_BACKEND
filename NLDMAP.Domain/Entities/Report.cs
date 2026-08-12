@@ -1,30 +1,45 @@
-using NLDMAP.Domain.ValueObjects;
-
 namespace NLDMAP.Domain.Entities;
 
-public class Report
+public class ReportNld
 {
-    public required Guid Id { get;  set; } = Guid.NewGuid();
-    public required string Folio { get;  set; }
-    public required Guid CreatorId { get;  set; } 
-    public  required MissingPerson Person { get;  set; }
-    public required Coordinate LastSightingLocation { get;  set; }
-    public required string CaseStatus { get;  set; }    // Texto en español: "SIN_VALIDAR", "ACTIVO"
-    public DateTime CreationDate { get; set; } = DateTime.UtcNow;
+    public  Guid Id { get; set; } = Guid.NewGuid();
 
-    private Report() { } 
+    //Relacion con el ciudadano que reporta
+    public Guid UserId { get; set; }
+    public required string MissingPersonRelation { get; set; } //Madre, amigo/conocido etc.
+    
+    //informacion de la desaparicion
+    public required DissapearEvents Events { get; set; }
 
-    public static Report CreateNewReport(Guid creatorId, MissingPerson person, Coordinate location)
-    {
-        return new Report
-        {
-            Id = Guid.NewGuid(),
-            Folio = $"NLD-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..4].ToUpper()}",
-            CreatorId = creatorId,
-            Person = person,
-            LastSightingLocation = location,
-            CaseStatus = "SIN_VALIDAR", 
-            CreationDate = DateTime.UtcNow
-        };
-    }
+    //Datos de consentimiento legal
+    public bool ConsentUseExclusive { get; set; }
+    public bool RequestInformationPublic { get; set; }
+
+    //estado del reporte
+    public string ReportStatus { get; set; } = "PENDIENTE"; // "SIN_VALIDAR", "ACTIVO"
 }
+
+//Objetos de valor
+
+
+public class DissapearEvents
+    {
+        public DateTime EventsDate { get; set; }
+        public TimeSpan EventsHour { get; set; }
+        
+        public required string Circunstance { get; set; } //Rumbo al trabajo ...
+        public required string DetailedDescription { get; set; } //como, cuando y donde
+        public bool WasWithVictim { get; set; } //si / no
+        
+        //Georreferenciacion
+        public required string Street  { get; set; }
+        public required string Neighborhood  { get; set; }
+        public required string State { get; set; }
+        public required string Municipality  { get; set; }
+        
+        //Postgis y Neo4j
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    } 
+
+    
