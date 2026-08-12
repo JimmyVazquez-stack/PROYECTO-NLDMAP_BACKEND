@@ -15,7 +15,18 @@ builder.Services.AddSwaggerGen();
 // 1. Inyección de la infraestructura (Base de datos)
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("PoliticaFrontend", policy =>
+        {
+            policy.AllowAnyOrigin() //url exacta de blazor
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+    });
+
 
 var app = builder.Build();
 
@@ -28,6 +39,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("PoliticaFrontend");
 
 app.UseAuthorization();
 
