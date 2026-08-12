@@ -12,7 +12,7 @@ namespace NLDMAP.Infrastructure.Persistence
 
         //Definicion de tablas en la BD
         public DbSet<User> Users { get; set; }
-        public DbSet<Report> Reports { get; set; }
+        public DbSet<ReportNLD> Reports { get; set; }
 
         //Configuracion de las tablas - fluent api
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,7 +29,7 @@ namespace NLDMAP.Infrastructure.Persistence
             });
 
             //Configuracion de tabla de reportes
-            modelBuilder.Entity<Report>(entity =>
+            modelBuilder.Entity<ReportNLD>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
