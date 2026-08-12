@@ -22,7 +22,7 @@ namespace NLDMAP.Infrastructure
             //services.AddNeo4jPersistence(configuration);
             
             services.AddScoped<IUserRepository, EfUserRepository>();
-            services.AddScoped<IExternalAuthValidator, GoogleAuthVlidator>();
+            services.AddScoped<IExternalAuthValidator, GoogleAuthValidator>();
         
             return services;
         }
