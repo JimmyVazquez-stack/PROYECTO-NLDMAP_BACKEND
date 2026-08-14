@@ -26,7 +26,7 @@ namespace NLDMAP.Domain.Entities
         public string? PhotographyUrl { get; private set; } //ruta a img almacenada
 
         //Historial de reportes
-        public IReadOnlyCollection<ReportNld> ReportHistory { get; private set; } = new List<ReportNld>();
+        public IReadOnlyCollection<Report> ReportHistory { get; private set; } = new List<Report>();
 
 
         //Constructor vacio requerido por EF
@@ -41,8 +41,8 @@ namespace NLDMAP.Domain.Entities
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("El nombre es obligatorio");
 
-            if (string.IsNullOrWhiteSpace(lastName)) ;
-            throw new ArgumentException("El apellido es obligatorio");
+            if (string.IsNullOrWhiteSpace(lastName))
+                throw new ArgumentException("El apellido es obligatorio");
 
             if (age < 0)
                 throw new ArgumentException("La edad no puede ser un numero negativo");
