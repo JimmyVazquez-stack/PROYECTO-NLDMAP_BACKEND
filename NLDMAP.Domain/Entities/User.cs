@@ -12,9 +12,9 @@
         
         //perfil reportante
         public string? Curp { get; set; }
-        public required string Sex { get; set; }
-        public required string Gender { get; set; }
-        public required string MaritalStatus { get; set; }
+        public string? Sex { get; set; }
+        public string? Gender { get; set; }
+        public string? MaritalStatus { get; set; }
         public string? Schooling { get; set; }
         public string PhoneNumber { get; set; } = string.Empty;
         public string Role { get; set; } = "Ciudadano";
