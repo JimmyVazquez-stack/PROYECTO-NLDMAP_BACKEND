@@ -18,7 +18,10 @@ public class GoogleAuthValidator : IExternalAuthValidator
             return new ExternalUserInfo
             {
                 Email = payload.Email,
-                FullName = payload.Name
+                FullName = payload.Name,
+                
+                ProviderId = payload.Subject,
+                ProviderName = "Google"
             };
         }
         catch (InvalidJwtException)
