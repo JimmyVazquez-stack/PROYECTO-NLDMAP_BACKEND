@@ -26,28 +26,34 @@ namespace NLDMAP.Infrastructure.Persistence
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Email).IsUnique();
                 
-                //relacion 1 a N 
-                entity.HasOne<MissingPerson>() //el reporte asignado a una persona
-                    .WithMany()                 // una persona cuenta con muchos reportes
-                    .HasForeignKey(r => r.MissingPersonId)
-                    .OnDelete(DeleteBehavior.Restrict);
-                
-                //configuracion objetos de valor
-                
             });
 
             //Configuracion de tabla de reportes 
-            modelBuilder.Entity<Report>(entity =>
+            modelBuilder.Entity<Report>(builder =>
             {
-                entity.HasKey(e => e.Id);
+                builder.HasKey(r => r.Id);
+                
+                //Reporte asignado a una persona
+                builder.HasOne<MissingPerson>()
+                    .WithMany()
+                    .HasForeignKey(r => r.MissingPersonId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                
+                //reporte asignado al usuario creador
+                builder.HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey(r => r.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                
+                //estado del reporte enum
+                builder.Property<ReportStatus>(r => r.Status)
+                    .HasConversion<string>()
+                    .HasMaxLength(20)
+                    .IsRequired();
 
-                //Mapeo del value object 'Coordenada' para que sus propiedades
-                //esten dentro de la misma tabla reportes
-                entity.OwnsOne(r => r.Events, event =>
-                {
-                    loc.Property(c => c.Latitude).HasColumnName("Latitude");
-                    loc.Property(c => c.Longitude).HasColumnName("Longitude");
-                });
+                //configurar value object
+                builder.OwnsOne(r => r.Events);
+
             });
         }
     }

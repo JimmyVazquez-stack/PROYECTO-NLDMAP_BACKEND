@@ -32,14 +32,26 @@ namespace NLDMAP.Infrastructure.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("DisappearanceDate")
+                    b.Property<string>("Curp")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("HasDisability")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Height")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IdentifyingSigns")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -47,9 +59,20 @@ namespace NLDMAP.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Nationality")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhotographyUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Sex")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.ToTable("MissingPerson");
+                    b.ToTable("MissingPersons");
                 });
 
             modelBuilder.Entity("NLDMAP.Domain.Entities.Report", b =>
@@ -58,26 +81,37 @@ namespace NLDMAP.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("CaseStatus")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<bool>("ConsentUseExclusive")
+                        .HasColumnType("boolean");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatorId")
+                    b.Property<Guid>("MissingPersonId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Folio")
+                    b.Property<Guid?>("MissingPersonId1")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("MissingPersonRelation")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("PersonId")
+                    b.Property<bool>("RequestInformationPublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonId");
+                    b.HasIndex("MissingPersonId");
+
+                    b.HasIndex("MissingPersonId1");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reports");
                 });
@@ -88,8 +122,13 @@ namespace NLDMAP.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("AlertRadioKm")
-                        .IsRequired()
+                    b.Property<int>("AlertRadioKm")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("BeAnonymous")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Curp")
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
@@ -100,8 +139,10 @@ namespace NLDMAP.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
+                    b.Property<string>("Gender")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MaritalStatus")
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
@@ -109,6 +150,20 @@ namespace NLDMAP.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Schooling")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Sex")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SsoProvider")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SsoProviderId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -122,31 +177,65 @@ namespace NLDMAP.Infrastructure.Migrations
 
             modelBuilder.Entity("NLDMAP.Domain.Entities.Report", b =>
                 {
-                    b.HasOne("NLDMAP.Domain.Entities.MissingPerson", "Person")
+                    b.HasOne("NLDMAP.Domain.Entities.MissingPerson", null)
                         .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("MissingPersonId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.OwnsOne("NLDMAP.Domain.ValueObjects.Coordinate", "LastSightingLocation", b1 =>
+                    b.HasOne("NLDMAP.Domain.Entities.MissingPerson", null)
+                        .WithMany("ReportHistory")
+                        .HasForeignKey("MissingPersonId1");
+
+                    b.HasOne("NLDMAP.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.OwnsOne("NLDMAP.Domain.ValueObjects.DisappearanceEvents", "Events", b1 =>
                         {
                             b1.Property<Guid>("ReportId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<string>("GeoSource")
+                            b1.Property<string>("Circumstance")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<DateTime>("EventsDate")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<TimeSpan>("EventsHour")
+                                .HasColumnType("interval");
+
+                            b1.Property<string>("FactsDescription")
                                 .IsRequired()
                                 .HasColumnType("text");
 
                             b1.Property<double>("Latitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("Latitude");
+                                .HasColumnType("double precision");
 
                             b1.Property<double>("Longitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("Longitude");
+                                .HasColumnType("double precision");
 
-                            b1.Property<DateTime>("Timestamp")
-                                .HasColumnType("timestamp with time zone");
+                            b1.Property<string>("Municipality")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<bool>("ReporterPresent")
+                                .HasColumnType("boolean");
+
+                            b1.Property<string>("State")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("text");
 
                             b1.HasKey("ReportId");
 
@@ -156,10 +245,13 @@ namespace NLDMAP.Infrastructure.Migrations
                                 .HasForeignKey("ReportId");
                         });
 
-                    b.Navigation("LastSightingLocation")
+                    b.Navigation("Events")
                         .IsRequired();
+                });
 
-                    b.Navigation("Person");
+            modelBuilder.Entity("NLDMAP.Domain.Entities.MissingPerson", b =>
+                {
+                    b.Navigation("ReportHistory");
                 });
 #pragma warning restore 612, 618
         }

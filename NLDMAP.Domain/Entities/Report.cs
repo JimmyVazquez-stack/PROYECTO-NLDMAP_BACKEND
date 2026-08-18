@@ -1,7 +1,7 @@
 using NLDMAP.Domain.ValueObjects;
 
-namespace NLDMAP.Domain.Entities
-{
+namespace NLDMAP.Domain.Entities;
+
     public class Report
     {
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -19,12 +19,44 @@ namespace NLDMAP.Domain.Entities
         public bool RequestInformationPublic { get; private set; }
 
         //estado del reporte
-        public string ReportStatus { get; private set; } = "PENDIENTE"; // "SIN_VALIDAR", "ACTIVO"
+        public  ReportStatus Status { get; private set; } = ReportStatus.Pendiente;
+        
+        //Constructor vacio requerido por EF
+        protected Report(){}
+        
+        //Constructor de dominio
+        public  Report (
+            Guid missingPersonId,
+            Guid userId,
+            string missingPersonRelation,
+            DisappearanceEvents events,
+            bool consentUseExclusive,
+            bool requestInformationPublic)
+        {
+            //Validaciones basicas
+            if (missingPersonId == Guid.Empty) throw new ArgumentException("ID de persona invalido");
+            if(userId == Guid.Empty) throw new ArgumentException("ID de usuario invalido");
+            if (events == null) throw new ArgumentNullException(nameof(events));
+            
+            //Asignaciones
+            MissingPersonId = missingPersonId;
+            UserId = userId;
+            MissingPersonRelation = missingPersonRelation;
+            Events = events;
+            ConsentUseExclusive = consentUseExclusive;
+            RequestInformationPublic = requestInformationPublic;
+        }
         
         //Metodos para cambiar el estado 
-        public void MarkAsActive() => ReportStatus = "ACTIVO";
-        public void MarkAsInvalid() => ReportStatus = "SIN_VALIDAR";
+        public void MarkAsActive() => Status = ReportStatus.Activo;
+        public void MarkAsInvalid() => Status = ReportStatus.SinValidar;
 
     }
+
+    public enum ReportStatus
+    {
+        Pendiente,
+        SinValidar,
+        Activo
+    }
     
-}

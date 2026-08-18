@@ -2,8 +2,13 @@
 {
     public class ExternalUserInfo
     {
-        public string Email { get; set; } = string.Empty;
-        public string FullName { get; set; } = string.Empty;
+        public required string Email { get; init; }  //accesor init para que propiedad Email sea inmutable
+        public required string FullName { get; init; } 
+        
+        public required string ProviderId { get; init; }
+        
+        //guardar proveedor
+        public string ProviderName { get; init; } = "Google";
 
     }
 }

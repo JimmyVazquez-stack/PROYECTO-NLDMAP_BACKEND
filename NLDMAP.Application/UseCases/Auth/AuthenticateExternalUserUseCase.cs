@@ -1,6 +1,7 @@
 ﻿using NLDMAP.Application.DTOs.Auth;
 using NLDMAP.Domain.Interfaces;
 using NLDMAP.Domain.Entities;
+using NLDMAP.Domain.ValueObjects;
 
 namespace NLDMAP.Application.UseCases.Auth
 {
@@ -35,7 +36,10 @@ namespace NLDMAP.Application.UseCases.Auth
                 {
                     Email = userInfo.Email,
                     FullName = userInfo.FullName,
-                    Role = "Ciudadano"
+                    Role = "Ciudadano",
+                    
+                    SsoProvider = userInfo.ProviderName,
+                    SsoProviderId = userInfo.ProviderId
                 };
                 await _userRepository.AddSync(user);
             }

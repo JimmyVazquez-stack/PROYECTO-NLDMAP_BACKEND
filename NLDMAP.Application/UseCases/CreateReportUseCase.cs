@@ -16,25 +16,44 @@ public class CreateReportUseCase
 
     public async Task<string> ExecuteAsync(CreateReportRequest request)
     {
-        // 1. Instanciar el Value Object (Validará matemáticamente las coordenadas)
-        var location = new Coordinate(request.LastSightingLatitude, request.LastSightingLongitude, request.GeoSource);
-
-        // 2. Instanciar la entidad de la persona (Validará datos en blanco y fechas)
+        // Instanciar la entidad de la persona
         var person = new MissingPerson(
             request.MissingPersonName,
             request.MissingPersonAge,
             request.MissingPersonGender,
-            request.MissingPersonHeight,
-            request.DisappearanceDate
+            request.MissingPersonHeight
         );
 
-        // 3. Crear la entidad raíz que orquesta el reporte y genera el folio
-        var report = ReportNLD.CreateNewReport(request.CreatorId, person, location);
+        // Instanciar el value object completo
+        var events = new DisappearanceEvents
+        {
+            EventsDate = request.DisappearanceDate,
+            EventsHour = request.DisappearanceHour,
+            Circumstance = request.Circumstance,
+            FactsDescription = request.FactsDescription,
+            ReporterPresent = request.ReporterPresent,
+            Street = request.Street,
+            City = request.City,
+            State = request.State,
+            Municipality = request.Municipality,
+            Latitude = request.LastSightingLatitude,
+            Longitude = request.LastSightingLongitude
+        };
 
+        // Instanciar la entidad Report
+        var report = new Report(
+            person.Id,
+            request.CreatorId,
+            request.MissingPersonRelation,
+            events,
+            request.ConsentUseExclusive,
+            request.RequestInformationPublic
+            );
+        
         // 4. Guardar en base de datos de manera asíncrona usando la abstracción
         await _reportRepository.AddAsync(report);
 
         // 5. Retornar el folio generado al cliente móvil
-        return report.Folio;
+        return report.Id.ToString();
     }
 }

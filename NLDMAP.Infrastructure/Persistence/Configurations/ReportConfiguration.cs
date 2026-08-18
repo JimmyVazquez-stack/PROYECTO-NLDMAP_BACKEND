@@ -26,8 +26,8 @@ namespace NLDMAP.Infrastructure.Persistence.Configurations
             
             //Mapeo enum a string para legibilidad
             builder.Property(r => r.Status)
-                .HasConversion<String>()
-                .HasMaxLength(30)
+                .HasConversion<string>()
+                .HasMaxLength(20)
                 .IsRequired();
             
             //Configuracion limites strings para tabla principal
@@ -43,20 +43,20 @@ namespace NLDMAP.Infrastructure.Persistence.Configurations
                 eventsBuilder.Property(e => e.EventsHour).HasColumnName("Event_Hour");
                 
                 //circunstancias
-                eventsBuilder.Property(e => e.Circunstance)
-                    .HasColumnName("Event_Circunstance")
+                eventsBuilder.Property(e => e.Circumstance)
+                    .HasColumnName("Event_Circumstance")
                     .HasColumnType("text"); //permitir textos largos
 
-                eventsBuilder.Property(e => e.WasWithVictim)
-                    .HasColumnName("Event_WasWithVictim");
+                eventsBuilder.Property(e => e.ReporterPresent)
+                    .HasColumnName("ReporterPresent");
                 
                 //georreferenciacion
                 eventsBuilder.Property(e => e.Street)
                     .HasColumnName("Address_Street")
                     .HasMaxLength(150);
 
-                eventsBuilder.Property(e => e.Neighborhood)
-                    .HasColumnName("Address_Neighborhood")
+                eventsBuilder.Property(e => e.City)
+                    .HasColumnName("City")
                     .HasMaxLength(150);
 
                 eventsBuilder.Property(e => e.State)

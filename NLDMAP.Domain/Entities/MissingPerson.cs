@@ -1,5 +1,4 @@
 
-
 namespace NLDMAP.Domain.Entities
 {
 
@@ -12,7 +11,7 @@ namespace NLDMAP.Domain.Entities
         public string Name { get; private set; }
         public string LastName { get; private set; }
         public string? Curp { get; private set; } //opcional si se desconoce
-        public DateTime? DateOfBirth { get; private set; }
+        public DateTime? DateOfBirth { get; private set; } // Calculado o nulo
         public int Age { get; private set; }
 
         public bool HasDisability { get; private set; } //si / no
@@ -34,34 +33,37 @@ namespace NLDMAP.Domain.Entities
         {
         }
 
-        //Constructor de dominio 
-        public MissingPerson(string name, string lastName, int age, string sex, string gender, string nationality)
+        //Constructor de dominio, alineado con los datos iniciales disponibles
+        public MissingPerson(string name, int age, string gender, string? height)
         {
             //validaciones
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("El nombre es obligatorio");
 
-            if (string.IsNullOrWhiteSpace(lastName))
-                throw new ArgumentException("El apellido es obligatorio");
-
             if (age < 0)
                 throw new ArgumentException("La edad no puede ser un numero negativo");
+
+            if (string.IsNullOrWhiteSpace(gender))
+                throw new ArgumentException("El género es obligatorio");
             
             //Asignaciones
             Name = name;
-            LastName = lastName;
             Age = age;
-            Sex = sex;
             Gender = gender;
-            Nationality = nationality;
+            Height = height; // Height is now set during construction
+
+            // Inicializar propiedades opcionales que no se pasan en el constructor
+            LastName = null;
+            Sex = null;
+            Nationality = null;
         }
         
         //Metodo para actualizar datos opcionales de la persona
-        public void SetAdditionalDetails(bool hasDisability, string? height, string? identifyingSigns,
+        public void SetAdditionalDetails(bool hasDisability, string? identifyingSigns,
             string? photographyUrl)
         {
             HasDisability = hasDisability;
-            Height = height;
+            // Height is now set in the constructor, so it's removed from here.
             IdentifyingSigns = identifyingSigns;
             PhotographyUrl = photographyUrl;
         }
