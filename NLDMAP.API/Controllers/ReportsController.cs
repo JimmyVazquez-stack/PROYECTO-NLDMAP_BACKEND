@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using NLDMAP.Application.DTOs;
-using NLDMAP.Application.Interfaces;
+using NLDMAP.Application.UseCases;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,13 +12,13 @@ namespace NLDMAP.API.Controllers
     [Route("api/[controller]")]
     public class ReportsController : ControllerBase
     {
-        //variable de solo lectura para repositorio
-        private readonly IReportRepository _reportRepository;
+        //Inyectar caso de uso real
+        private readonly CreateReportUseCase _createReportUseCase;
         
         //Inyeccion de dependencias en el constructor
-        public ReportsController(IReportRepository reportRepository)
+        public ReportsController(CreateReportUseCase createReportUseCase)
         {
-            _reportRepository = reportRepository;
+            _createReportUseCase = createReportUseCase;
         }
         
 
@@ -26,7 +26,6 @@ namespace NLDMAP.API.Controllers
         [HttpGet("map-points")]
         public ActionResult<IEnumerable<MapPointResponse>> GetMapPoints()
         {
-
             return Ok(new List<MapPointResponse>());
         }
 
@@ -47,18 +46,15 @@ namespace NLDMAP.API.Controllers
                 });
             }
 
-            //Generar el folio unico del reporte
-            var nuevoFolio = Guid.NewGuid();
+            //Ejecutar caso de uso con la creacion de entidades y guardado
+            var nuevoFolioId = await _createReportUseCase.ExecuteAsync(request);
             
-            //Delegar responsabilidad de guardar
-            await _reportRepository.SaveReportAsync(nuevoFolio, request);
-
             //responder a flutter 
             return Ok(new
             {
                 Exito= true,
                 Mensaje = "Reporte creado exitosamente.",
-                Folio = nuevoFolio
+                Folio = nuevoFolioId
             });
         }
     }
