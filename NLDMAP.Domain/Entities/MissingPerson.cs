@@ -9,18 +9,18 @@ namespace NLDMAP.Domain.Entities
 
         //Propiedades encapsuladas
         public string Name { get; private set; }
-        public string LastName { get; private set; }
+        public string? LastName { get; private set; }
         public string? Curp { get; private set; } //opcional si se desconoce
         public DateTime? DateOfBirth { get; private set; } // Calculado o nulo
         public int Age { get; private set; }
 
         public bool HasDisability { get; private set; } //si / no
-        public string Sex { get; private set; }
+        public string? Sex { get; private set; }
         public string Gender { get; private set; } //Masculino, femenino, indeterminado
-        public string Nationality { get; private set; }
+        public string? Nationality { get; private set; }
 
         //Propiedades opcionales que se pueden llenar despues
-        public string? Height { get; private set; }
+        public double? Height { get; private set; }
         public string? IdentifyingSigns { get; private set; } //tatuaje, cicatriz ...
         public string? PhotographyUrl { get; private set; } //ruta a img almacenada
 
@@ -34,7 +34,7 @@ namespace NLDMAP.Domain.Entities
         }
 
         //Constructor de dominio, alineado con los datos iniciales disponibles
-        public MissingPerson(string name, int age, string gender, string? height)
+        public MissingPerson(string name, int age, string gender, double? height)
         {
             //validaciones
             if (string.IsNullOrWhiteSpace(name))
@@ -50,7 +50,7 @@ namespace NLDMAP.Domain.Entities
             Name = name;
             Age = age;
             Gender = gender;
-            Height = height; // Height is now set during construction
+            Height = height; 
 
             // Inicializar propiedades opcionales que no se pasan en el constructor
             LastName = null;
@@ -63,7 +63,6 @@ namespace NLDMAP.Domain.Entities
             string? photographyUrl)
         {
             HasDisability = hasDisability;
-            // Height is now set in the constructor, so it's removed from here.
             IdentifyingSigns = identifyingSigns;
             PhotographyUrl = photographyUrl;
         }
