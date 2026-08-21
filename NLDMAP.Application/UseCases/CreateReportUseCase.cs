@@ -25,20 +25,20 @@ public class CreateReportUseCase
         );
 
         // Instanciar el value object completo
-        var events = new DisappearanceEvents
-        {
-            EventsDate = request.DisappearanceDate,
-            EventsHour = request.DisappearanceHour,
-            Circumstance = request.Circumstance,
-            FactsDescription = request.FactsDescription,
-            ReporterPresent = request.ReporterPresent,
-            Street = request.Street,
-            City = request.City,
-            State = request.State,
-            Municipality = request.Municipality,
-            Latitude = request.LastSightingLatitude,
-            Longitude = request.LastSightingLongitude
-        };
+        var events = new DisappearanceEvents(
+
+            request.DisappearanceDate,
+            request.DisappearanceHour,
+            request.Circumstance,
+            request.FactsDescription,
+            request.ReporterPresent,
+            request.Street,
+            request.City,
+            request.State,
+            request.Municipality,
+            request.LastSightingLatitude,
+            request.LastSightingLongitude
+        );
 
         // Instanciar la entidad Report
         var report = new Report(
