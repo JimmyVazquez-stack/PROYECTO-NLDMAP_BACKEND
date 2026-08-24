@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using NLDMAP.Domain.Interfaces;
+using NLDMAP.Domain.Repositories;
 using NLDMAP.Infrastructure.ExternalServices;
 using NLDMAP.Infrastructure.Persistence;
 using NLDMAP.Infrastructure.Repositories;
@@ -35,6 +36,7 @@ namespace NLDMAP.Infrastructure
                 return GraphDatabase.Driver(uri, AuthTokens.Basic(user, password));
             });
             services.AddScoped<IUserRepository, EfUserRepository>();
+            services.AddScoped<IReportRepository, EfReportRepository>();
             services.AddScoped<IExternalAuthValidator, GoogleAuthValidator>();
         
             return services;
